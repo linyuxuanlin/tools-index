@@ -10,12 +10,9 @@ RUN npm install
 # 复制源码
 COPY . .
 
-# 创建启动脚本
-RUN echo '#!/bin/sh\nnode_modules/.bin/vite --host 0.0.0.0' > start.sh && \
-    chmod +x start.sh
-
 # 设置环境变量
 ENV NODE_ENV=production
+ENV HOST=0.0.0.0
 
 # 设置启动命令
-CMD ["./start.sh"] 
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"] 
