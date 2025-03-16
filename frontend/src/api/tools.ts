@@ -41,17 +41,35 @@ export const getFavorites = async (): Promise<Tool[]> => {
 };
 
 export const addFavorite = async (toolId: string): Promise<void> => {
+  if (!toolId || toolId === 'undefined') {
+    console.error('收藏失败：无效的工具ID', toolId);
+    throw new Error('无效的工具ID');
+  }
+  
   try {
     await axiosInstance.post(`/tools/favorites/${toolId}`);
-  } catch (error) {
-    throw new Error('添加收藏失败');
+  } catch (error: any) {
+    console.error('添加收藏请求失败:', error?.response?.data || error);
+    if (error?.response?.status === 401) {
+      throw new Error('请先登录后再收藏');
+    }
+    throw new Error(error?.response?.data?.message || '添加收藏失败');
   }
 };
 
 export const removeFavorite = async (toolId: string): Promise<void> => {
+  if (!toolId || toolId === 'undefined') {
+    console.error('取消收藏失败：无效的工具ID', toolId);
+    throw new Error('无效的工具ID');
+  }
+  
   try {
     await axiosInstance.delete(`/tools/favorites/${toolId}`);
-  } catch (error) {
-    throw new Error('取消收藏失败');
+  } catch (error: any) {
+    console.error('取消收藏请求失败:', error?.response?.data || error);
+    if (error?.response?.status === 401) {
+      throw new Error('请先登录后再操作');
+    }
+    throw new Error(error?.response?.data?.message || '取消收藏失败');
   }
 }; 

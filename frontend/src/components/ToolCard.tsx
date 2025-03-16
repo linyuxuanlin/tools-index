@@ -19,12 +19,19 @@ const ToolCard = ({ tool, user, isFavorite, onFavoriteChange }: ToolCardProps) =
 
     if (!user) return;
 
+    if (!tool.id || tool.id === 'undefined') {
+      console.error('收藏失败：工具ID无效', tool);
+      return;
+    }
+
     setIsLoading(true);
     try {
       if (isFavorite) {
+        console.log('取消收藏工具:', tool.id);
         await removeFavorite(tool.id);
         onFavoriteChange(tool.id, false);
       } else {
+        console.log('添加收藏工具:', tool.id);
         await addFavorite(tool.id);
         onFavoriteChange(tool.id, true);
       }
